@@ -39,7 +39,7 @@
               <object class="AdwStatusPage">
                 <property name="valign">1</property>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkBox" id="main_box">
                   <property name="orientation">1</property>
                   <property name="margin-end">60</property>
                   <property name="margin-start">60</property>

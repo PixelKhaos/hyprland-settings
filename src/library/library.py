@@ -11,23 +11,30 @@ from gi.repository import Gtk, Adw, Gio, Gdk
 path_name = str(pathlib.Path(__file__).resolve().parent.parent)
 homeFolder = os.path.expanduser('~') # Path to home folder
 configFolderName = "com.ml4w.hyprlandsettings" # config folder name
-configFolder = homeFolder + "/.config/" + configFolderName # Config folder name
 
 # Library of helper functions
 class Library:
+    def __init__(self):
+        self.configFolder = os.path.join(homeFolder, ".config", configFolderName)
 
     # Execute hyprctl.sh
     def executeHyprCtl(self):
-        print(":: Execute: " + configFolder + "/hyprctl.sh")
-        subprocess.Popen(["flatpak-spawn", "--host", configFolder + "/hyprctl.sh"])
+        print(":: Execute: " + self.configFolder + "/hyprctl.sh")
+        try:
+            os.chmod(self.configFolder + "/hyprctl.sh", 0o755)
+            subprocess.run(["flatpak-spawn", "--host", self.configFolder + "/hyprctl.sh"], check=True)
+            return True
+        except subprocess.CalledProcessError as e:
+            print(f"Error executing hyprctl.sh: {e}")
+            return False
 
     # Load content from hyprctl.json
     def loadHyprctlJson(self):
-        hyprctl_json = open(configFolder + "/hyprctl.json")
+        hyprctl_json = open(self.configFolder + "/hyprctl.json")
         return hyprctl_json
 
     def writeHyprctlJson(self,result):
-        with open(configFolder + '/hyprctl.json', 'w', encoding='utf-8') as f:
+        with open(self.configFolder + '/hyprctl.json', 'w', encoding='utf-8') as f:
             json.dump(result, f, ensure_ascii=False, indent=4)
 
     # Generates Hyprctl Dictionary
@@ -63,7 +70,7 @@ class Library:
         outcome = outcome.replace('	','')
 
         # Create a temporary file from the output
-        file=open(configFolder + "/hyprctl_description.json","w+")
+        file=open(self.configFolder + "/hyprctl_description.json","w+")
         file.write(str(outcome))
         file.close()
 
@@ -99,17 +106,17 @@ class Library:
     # Run application setup
     def runSetup(self):
         # Create ml4w-hyprland-settings in .config folder
-        pathlib.Path(configFolder).mkdir(parents=True, exist_ok=True)
-        print(":: Using configuration in: " + configFolder)
+        pathlib.Path(self.configFolder).mkdir(parents=True, exist_ok=True)
+        print(":: Using configuration in: " + self.configFolder)
 
         #Update hyprctl.sh in settingsFolder
-        shutil.copy(path_name + '/scripts/hyprctl.sh', configFolder)
-        print(":: hyprctl.sh updated in " + configFolder)
+        shutil.copy(path_name + '/scripts/hyprctl.sh', self.configFolder)
+        print(":: hyprctl.sh updated in " + self.configFolder)
 
         # Create empty hyprctl.json if not exists
-        if not os.path.exists(configFolder + '/hyprctl.json'):
-            shutil.copy(path_name + '/json/hyprctl.json', configFolder)
-            print(":: hyprctl.json created in " + configFolder)
+        if not os.path.exists(self.configFolder + '/hyprctl.json'):
+            shutil.copy(path_name + '/json/hyprctl.json', self.configFolder)
+            print(":: hyprctl.json created in " + self.configFolder)
 
     # Run hyprctl command with keyword and value
     def runHyprctl(self,keyword, value):

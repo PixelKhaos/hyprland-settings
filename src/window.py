@@ -20,13 +20,34 @@
 from gi.repository import Adw
 from gi.repository import Gtk
 
+from .library.library import Library
+from .modules.collections import CollectionsModule
+
 @Gtk.Template(resource_path='/com/ml4w/hyprlandsettings/window.ui')
 class HyprlandSettingsWindow(Adw.ApplicationWindow):
     __gtype_name__ = 'Ml4wHyprlandSettingsWindow'
 
     keywords_group = Gtk.Template.Child()
     novariables = Gtk.Template.Child()
+    main_box = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        
+        self.library = Library()
+        
+        self.collections_module = CollectionsModule(self)
+        
+        self.collections_group = self.collections_module.create_collections_group()
+        self.main_box.append(self.collections_group)
 
+    def refresh_ui(self):
+        """Refresh all UI elements to reflect current settings"""
+        # TODO: Refresh other UI elements as they are added
+        # For now, just refresh collections
+        old_group = self.collections_group
+        new_group = self.collections_module.create_collections_group()
+        parent = old_group.get_parent()
+        parent.remove(old_group)
+        parent.append(new_group)
+        self.collections_group = new_group

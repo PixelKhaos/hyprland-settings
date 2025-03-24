@@ -4,8 +4,8 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
 
-  <name>Hyprland-settings</name>
-  <summary>Keep the summary shorter, between 10 and 35 characters</summary>
+  <name>Hyprland Settings</name>
+  <summary>Settings GUI for Hyprland</summary>
   <description>
     <p>No description</p>
   </description>
@@ -15,7 +15,7 @@
   </developer>
 
   <!-- Requered: Should be a link to the upstream homepage for the component -->
-  <url type="homepage">https://example.org/</url>
+  <url type="homepage">https://github.com/mylinuxforwork/hyprland-settings</url>
   <!-- Recommended: It is highly recommended for open-source projects to display the source code repository -->
   <url type="vcs-browser">https://example.org/repository</url>
   <!-- Should point to the software's bug tracking system, for users to report new bugs -->
@@ -36,14 +36,14 @@
   <translation type="gettext">hyprland-settings</translation>
   <!-- All graphical applications having a desktop file must have this tag in the MetaInfo.
      If this is present, appstreamcli compose will pull icons, keywords and categories from the desktop file. -->
-  <launchable type="desktop-id">com.ml4w.hyprland.settings.desktop</launchable>
+  <launchable type="desktop-id">com.ml4w.hyprlandsettings.desktop</launchable>
   <!-- Use the OARS website (https://hughsie.github.io/oars/generate.html) to generate these and make sure to use oars-1.1 -->
   <content_rating type="oars-1.1" />
 
   <!-- Applications should set a brand color in both light and dark variants like so -->
   <branding>
-    <color type="primary" scheme_preference="light">#ff00ff</color>
-    <color type="primary" scheme_preference="dark">#993d3d</color>
+    <color type="primary" scheme_preference="light">#3584e4</color>
+    <color type="primary" scheme_preference="dark">#3584e4</color>
   </branding>
 
   <screenshots>
@@ -58,6 +58,11 @@
   </screenshots>
 
   <releases>
+    <release version="0.1.0" date="2025-03-24">
+      <description>
+        <p>Initial release</p>
+      </description>
+    </release>
     <release version="1.0.1" date="2024-01-18">
       <url type="details">https://example.org/changelog.html#version_1.0.1</url>
       <description translate="no">

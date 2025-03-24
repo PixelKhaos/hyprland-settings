@@ -1,10 +1,13 @@
-pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name()
-moduledir = pkgdatadir / 'hyprland_settings'
+pkgdatadir = join_paths(get_option('prefix'), get_option('libdir'), meson.project_name())
+moduledir = join_paths(pkgdatadir, 'hyprland_settings')
+
 gnome = import('gnome')
 
-gnome.compile_resources('hyprland-settings',
+gresource = gnome.compile_resources(
+  'hyprland-settings',
   'hyprland-settings.gresource.xml',
   gresource_bundle: true,
+  source_dir: '.',
   install: true,
   install_dir: pkgdatadir,
 )
@@ -12,9 +15,9 @@ gnome.compile_resources('hyprland-settings',
 python = import('python')
 
 conf = configuration_data()
-conf.set('PYTHON', python.find_installation('python3').full_path())
+conf.set('PYTHON', python.find_installation('python3').path())
 conf.set('VERSION', meson.project_version())
-conf.set('localedir', get_option('prefix') / get_option('localedir'))
+conf.set('localedir', join_paths(get_option('prefix'), get_option('localedir')))
 conf.set('pkgdatadir', pkgdatadir)
 
 configure_file(
@@ -22,8 +25,7 @@ configure_file(
   output: 'hyprland-settings',
   configuration: conf,
   install: true,
-  install_dir: get_option('bindir'),
-  install_mode: 'r-xr-xr-x'
+  install_dir: get_option('bindir')
 )
 
 hyprland_settings_sources = [
@@ -35,5 +37,6 @@ hyprland_settings_sources = [
 
 install_data(hyprland_settings_sources, install_dir: moduledir)
 install_subdir('library', install_dir: moduledir)
+install_subdir('modules', install_dir: moduledir)
 install_subdir('json', install_dir: moduledir)
 install_subdir('scripts', install_dir: moduledir)
